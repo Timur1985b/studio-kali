@@ -61,7 +61,7 @@
 <body>
 <div class="header">
   <div class="header-bg"></div>
-  <div class="logo"><img src="https://5a432206ab.clvaw-cdnwnd.com/79c345330eb7666ecc4c29a4a2ea684d/200000478-c9021c9023/450/%D0%9F%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%2042x59%20px%203%20%281%29.svg" alt="Studio Kali"/></div>
+    <div class="logo"><img src="https://5a432206ab.clvaw-cdnwnd.com/79c345330eb7666ecc4c29a4a2ea684d/200000478-c9021c9023/450/%D0%9F%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%2042x59%20px%203%20%281%29.svg" alt="Studio Kali"/></div>
   <div class="tagline" id="tagline">PRAHA 2 · BĚLEHRADSKÁ 68</div>
   <div class="divider"></div>
   <div class="subtitle" id="subtitle">Váš osobní AI stylový poradce</div>
@@ -74,20 +74,31 @@
     <button class="lang-btn" onclick="setLang('en',this)">EN</button>
   </div>
   <div class="upload-label" id="uploadLabel">NAHRAJTE FOTOGRAFII</div>
-  <div class="upload-border" id="uploadBorder">
-    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-      <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
-      <div id="uploadPlaceholder" style="text-align:center;padding:48px">
-        <div class="upload-icon">✦</div>
-        <div class="upload-hint" id="uploadHint">přetáhněte nebo klikněte</div>
+  <div class="upload-border" id="uploadBorder" style="padding:0;background:none;border-radius:0;animation:none;">
+    <!-- Stylist behind frame effect -->
+    <div style="position:relative;border-radius:18px;overflow:hidden;">
+      <!-- Stylist photo as background -->
+      <img src="https://i.ibb.co/PZpF5Ywz/Photoroom-20260401-163712.png" alt="Stylist" style="width:100%;height:600px;object-fit:cover;object-position:center 5%;display:block;"/>
+      <!-- Dark overlay -->
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,11,0.45) 0%,rgba(8,8,11,0.1) 30%,rgba(8,8,11,0.1) 65%,rgba(8,8,11,0.7) 100%);pointer-events:none;"></div>
+      <!-- Floating frame on top -->
+      <div
+        onclick="document.getElementById('fileInput').click()"
+        ondragover="event.preventDefault()"
+        ondrop="handleDrop(event)"
+        style="position:absolute;top:50%;left:50%;transform:translate(-50%,-45%);width:55%;aspect-ratio:3/4;cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid rgba(212,175,55,0.85);box-shadow:0 0 0 1px rgba(0,0,0,0.8),0 8px 40px rgba(0,0,0,0.7),0 0 30px rgba(212,175,55,0.3);background:#08080b;">
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+        <div id="uploadPlaceholder" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
+          <div class="upload-icon" style="margin-bottom:12px;">✦</div>
+          <div class="upload-hint" id="uploadHint" style="font-size:10px;">přetáhněte nebo klikněte</div>
+        </div>
+        <div id="previewContainer" style="display:none;position:relative;width:100%;height:100%;">
+          <img id="previewImg" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(8,8,11,0.8),transparent);padding:20px 0 8px;text-align:center;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:2px;color:rgba(240,235,227,0.5);" id="changeHint">KLIKNĚTE PRO ZMĚNU</div>
+        </div>
       </div>
-      <div id="previewContainer" style="display:none;position:relative;width:100%">
-        <img id="previewImg" class="preview-img"/>
-        <div class="preview-overlay"></div>
-        <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div><div class="corner corner-br"></div>
-        <div class="change-hint" id="changeHint">KLIKNĚTE PRO ZMĚNU</div>
-      </div>
+      <!-- Gold decorative dots -->
+      <div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:4px;color:rgba(212,175,55,0.4);">✦ · · · ✦</div>
     </div>
   </div>
   <button class="analyze-btn" id="analyzeBtn" onclick="analyze()">✦ <span id="analyzeBtnText">Analyzovat Můj Styl</span></button>
@@ -112,7 +123,7 @@ const PROMPTS={cz:'Jsi luxusní stylistka Beauty Studio Kali v Praze. Analyzuj f
 function setLang(l,btn){lang=l;const t=LANGS[l];['tagline','subtitle','desc','uploadLabel','uploadHint','changeHint','loadingText','resultTitle'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t[id]||t[Object.keys(t).find(k=>k===id)]||''});document.getElementById('analyzeBtnText').textContent=t.analyzeBtn;document.getElementById('bookBtn').textContent=t.bookBtn;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('resultBox').style.display='none';}
 function handleDrop(e){e.preventDefault();handleFile(e.dataTransfer.files[0]);}
 function handleFile(file){if(!file||!file.type.startsWith('image/'))return;photoMime=file.type;const r=new FileReader();r.onload=e=>{photoBase64=e.target.result.split(',')[1];document.getElementById('previewImg').src=e.target.result;document.getElementById('uploadPlaceholder').style.display='none';document.getElementById('previewContainer').style.display='block';document.getElementById('uploadBorder').classList.add('has-photo');document.getElementById('analyzeBtn').style.display='block';document.getElementById('resultBox').style.display='none';};r.readAsDataURL(file);}
-async function analyze(){if(!photoBase64)return;document.getElementById('analyzeBtn').style.display='none';document.getElementById('loading').style.display='block';document.getElementById('resultBox').style.display='none';try{const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:photoMime,data:photoBase64}},{type:'text',text:PROMPTS[lang]}]}]})});const data=await res.json();const content=Array.isArray(data.content)?data.content:[];const text=content.length>0?content.map(b=>b.text||'').join(''):('Chyba: '+JSON.stringify(data).slice(0,100));const html=text.split('\n').map(line=>`<p>${line.replace(/\*\*(.*?)\*\*/g,'<strong style="color:#d4af37">$1</strong>')}</p>`).join('');document.getElementById('resultContent').innerHTML=html;document.getElementById('resultBox').style.display='block';}catch(e){document.getElementById('resultContent').innerHTML='<p style="color:#e88;font-family:Montserrat,sans-serif">Chyba připojení.</p>';document.getElementById('resultBox').style.display='block';}document.getElementById('loading').style.display='none';document.getElementById('analyzeBtn').style.display='block';}
+async function analyze(){if(!photoBase64)return;document.getElementById('analyzeBtn').style.display='none';document.getElementById('loading').style.display='block';document.getElementById('resultBox').style.display='none';try{const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:photoMime,data:photoBase64}},{type:'text',text:PROMPTS[lang]}]}]})});const data=await res.json();const content=Array.isArray(data.content)?data.content:[];const text=content.length>0?content.map(b=>b.text||'').join(''):('Chyba: '+JSON.stringify(data).slice(0,100));const html=text.split('\n').map(line=>`<p>${line.replace(/\*\*(.*?)\*\*/g,'<strong style="color:#d4af37">$1</strong>')}</p>`).join('');document.getElementById('resultContent').innerHTML=html;document.getElementById('resultBox').style.display='block';}catch(e){document.getElementById('resultContent').innerHTML='<p style="color:#e88;font-family:Montserrat,sans-serif">Chyba připojení.</p>';document.getElementById('resultBox').style.display='block';}document.getElementById('loading').style.display='none';document.getElementById('analyzeBtn').style.display='block';}
 </script>
 </body>
 </html>
