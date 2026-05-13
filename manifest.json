@@ -1,0 +1,22 @@
+{
+  "name": "Studio Kali – AI Stylový Poradce",
+  "short_name": "Studio Kali",
+  "description": "AI analýza tvaru obličeje a doporučení účesu od Studio Kali Praha",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08080b",
+  "theme_color": "#d4af37",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://5a432206ab.clvaw-cdnwnd.com/79c345330eb7666ecc4c29a4a2ea684d/200000478-c9021c9023/450/%D0%9F%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%2042x59%20px%203%20%281%29.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "https://5a432206ab.clvaw-cdnwnd.com/79c345330eb7666ecc4c29a4a2ea684d/200000478-c9021c9023/450/%D0%9F%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%2042x59%20px%203%20%281%29.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
