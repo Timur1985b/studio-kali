@@ -1,10 +1,8 @@
 {
-  "headers": [
-    {
-      "source": "/sw.js",
-      "headers": [
-        { "key": "Content-Type", "value": "application/javascript" }
-      ]
-    }
-  ]
+"rewrites": [
+{
+"source": "/((?!sw.js|icon.png|manifest.json).*)",
+"destination": "/index.html"
+}
+]
 }
